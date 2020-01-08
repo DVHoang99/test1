@@ -1,0 +1,315 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="test2Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="IMG">
+          <Key>
+            <PropertyRef Name="IDIMG" />
+          </Key>
+          <Property Name="IDIMG" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="title" Type="nvarchar" MaxLength="100" />
+          <Property Name="IMGPath" Type="varchar(max)" />
+          <Property Name="IDProduct" Type="int" />
+        </EntityType>
+        <EntityType Name="infoProduct">
+          <Key>
+            <PropertyRef Name="Stt" />
+          </Key>
+          <Property Name="Stt" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="NationalID" Type="int" />
+          <Property Name="idProduct" Type="int" />
+        </EntityType>
+        <EntityType Name="login">
+          <Key>
+            <PropertyRef Name="userName" />
+          </Key>
+          <Property Name="userName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="passWord" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="chucnang" Type="nvarchar" MaxLength="20" Nullable="false" />
+        </EntityType>
+        <EntityType Name="NATIONAL">
+          <Key>
+            <PropertyRef Name="NationalID" />
+          </Key>
+          <Property Name="NationalID" Type="int" Nullable="false" />
+          <Property Name="NationalName" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="SanPham">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Ten" Type="nvarchar" MaxLength="50" />
+          <Property Name="SoLuong" Type="int" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <Association Name="FK__IMG__IDProduct__4AB81AF0">
+          <End Role="SanPham" Type="Self.SanPham" Multiplicity="0..1" />
+          <End Role="IMG" Type="Self.IMG" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SanPham">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="IMG">
+              <PropertyRef Name="IDProduct" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__infoProdu__idPro__3D5E1FD2">
+          <End Role="NATIONAL" Type="Self.NATIONAL" Multiplicity="0..1" />
+          <End Role="infoProduct" Type="Self.infoProduct" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="NATIONAL">
+              <PropertyRef Name="NationalID" />
+            </Principal>
+            <Dependent Role="infoProduct">
+              <PropertyRef Name="NationalID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__infoProdu__idPro__3E52440B">
+          <End Role="SanPham" Type="Self.SanPham" Multiplicity="0..1" />
+          <End Role="infoProduct" Type="Self.infoProduct" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SanPham">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="infoProduct">
+              <PropertyRef Name="idProduct" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="test2ModelStoreContainer">
+          <EntitySet Name="IMG" EntityType="Self.IMG" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="infoProduct" EntityType="Self.infoProduct" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="login" EntityType="Self.login" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="NATIONAL" EntityType="Self.NATIONAL" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SanPham" EntityType="Self.SanPham" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__IMG__IDProduct__4AB81AF0" Association="Self.FK__IMG__IDProduct__4AB81AF0">
+            <End Role="SanPham" EntitySet="SanPham" />
+            <End Role="IMG" EntitySet="IMG" />
+          </AssociationSet>
+          <AssociationSet Name="FK__infoProdu__idPro__3D5E1FD2" Association="Self.FK__infoProdu__idPro__3D5E1FD2">
+            <End Role="NATIONAL" EntitySet="NATIONAL" />
+            <End Role="infoProduct" EntitySet="infoProduct" />
+          </AssociationSet>
+          <AssociationSet Name="FK__infoProdu__idPro__3E52440B" Association="Self.FK__infoProdu__idPro__3E52440B">
+            <End Role="SanPham" EntitySet="SanPham" />
+            <End Role="infoProduct" EntitySet="infoProduct" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="test2Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="login">
+          <Key>
+            <PropertyRef Name="userName" />
+          </Key>
+          <Property Name="userName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="passWord" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="chucnang" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+        </EntityType>
+        <EntityType Name="SanPham">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="Ten" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="SoLuong" Type="Int32" />
+          <NavigationProperty Name="infoProducts" Relationship="test2Model.FK__infoProdu__idPro__3E52440B" FromRole="SanPham" ToRole="infoProduct" />
+          <NavigationProperty Name="IMGs" Relationship="test2Model.FK__IMG__IDProduct__4AB81AF0" FromRole="SanPham" ToRole="IMG" />
+        </EntityType>
+        <EntityContainer Name="test2Entities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="logins" EntityType="Self.login" />
+          <EntitySet Name="SanPhams" EntityType="Self.SanPham" />
+          <EntitySet Name="infoProducts" EntityType="test2Model.infoProduct" />
+          <EntitySet Name="NATIONALs" EntityType="test2Model.NATIONAL" />
+          <EntitySet Name="sysdiagrams" EntityType="test2Model.sysdiagram" />
+          <AssociationSet Name="FK__infoProdu__idPro__3D5E1FD2" Association="test2Model.FK__infoProdu__idPro__3D5E1FD2">
+            <End Role="NATIONAL" EntitySet="NATIONALs" />
+            <End Role="infoProduct" EntitySet="infoProducts" />
+          </AssociationSet>
+          <AssociationSet Name="FK__infoProdu__idPro__3E52440B" Association="test2Model.FK__infoProdu__idPro__3E52440B">
+            <End Role="SanPham" EntitySet="SanPhams" />
+            <End Role="infoProduct" EntitySet="infoProducts" />
+          </AssociationSet>
+          <EntitySet Name="IMGs" EntityType="test2Model.IMG" />
+          <AssociationSet Name="FK__IMG__IDProduct__4AB81AF0" Association="test2Model.FK__IMG__IDProduct__4AB81AF0">
+            <End Role="SanPham" EntitySet="SanPhams" />
+            <End Role="IMG" EntitySet="IMGs" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="infoProduct">
+          <Key>
+            <PropertyRef Name="Stt" />
+          </Key>
+          <Property Name="Stt" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NationalID" Type="Int32" />
+          <Property Name="idProduct" Type="Int32" />
+          <NavigationProperty Name="NATIONAL" Relationship="test2Model.FK__infoProdu__idPro__3D5E1FD2" FromRole="infoProduct" ToRole="NATIONAL" />
+          <NavigationProperty Name="SanPham" Relationship="test2Model.FK__infoProdu__idPro__3E52440B" FromRole="infoProduct" ToRole="SanPham" />
+        </EntityType>
+        <EntityType Name="NATIONAL">
+          <Key>
+            <PropertyRef Name="NationalID" />
+          </Key>
+          <Property Name="NationalID" Type="Int32" Nullable="false" />
+          <Property Name="NationalName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="infoProducts" Relationship="test2Model.FK__infoProdu__idPro__3D5E1FD2" FromRole="NATIONAL" ToRole="infoProduct" />
+        </EntityType>
+        <EntityType Name="sysdiagram">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <Association Name="FK__infoProdu__idPro__3D5E1FD2">
+          <End Type="test2Model.NATIONAL" Role="NATIONAL" Multiplicity="0..1" />
+          <End Type="test2Model.infoProduct" Role="infoProduct" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="NATIONAL">
+              <PropertyRef Name="NationalID" />
+            </Principal>
+            <Dependent Role="infoProduct">
+              <PropertyRef Name="NationalID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__infoProdu__idPro__3E52440B">
+          <End Type="test2Model.SanPham" Role="SanPham" Multiplicity="0..1" />
+          <End Type="test2Model.infoProduct" Role="infoProduct" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SanPham">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="infoProduct">
+              <PropertyRef Name="idProduct" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="IMG">
+          <Key>
+            <PropertyRef Name="IDIMG" />
+          </Key>
+          <Property Name="IDIMG" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="title" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="IMGPath" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="IDProduct" Type="Int32" />
+          <NavigationProperty Name="SanPham" Relationship="test2Model.FK__IMG__IDProduct__4AB81AF0" FromRole="IMG" ToRole="SanPham" />
+        </EntityType>
+        <Association Name="FK__IMG__IDProduct__4AB81AF0">
+          <End Type="test2Model.SanPham" Role="SanPham" Multiplicity="0..1" />
+          <End Type="test2Model.IMG" Role="IMG" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SanPham">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="IMG">
+              <PropertyRef Name="IDProduct" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="test2ModelStoreContainer" CdmEntityContainer="test2Entities">
+          <EntitySetMapping Name="logins">
+            <EntityTypeMapping TypeName="test2Model.login">
+              <MappingFragment StoreEntitySet="login">
+                <ScalarProperty Name="userName" ColumnName="userName" />
+                <ScalarProperty Name="passWord" ColumnName="passWord" />
+                <ScalarProperty Name="chucnang" ColumnName="chucnang" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SanPhams">
+            <EntityTypeMapping TypeName="test2Model.SanPham">
+              <MappingFragment StoreEntitySet="SanPham">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Ten" ColumnName="Ten" />
+                <ScalarProperty Name="SoLuong" ColumnName="SoLuong" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="infoProducts">
+            <EntityTypeMapping TypeName="test2Model.infoProduct">
+              <MappingFragment StoreEntitySet="infoProduct">
+                <ScalarProperty Name="idProduct" ColumnName="idProduct" />
+                <ScalarProperty Name="NationalID" ColumnName="NationalID" />
+                <ScalarProperty Name="Stt" ColumnName="Stt" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="NATIONALs">
+            <EntityTypeMapping TypeName="test2Model.NATIONAL">
+              <MappingFragment StoreEntitySet="NATIONAL">
+                <ScalarProperty Name="NationalName" ColumnName="NationalName" />
+                <ScalarProperty Name="NationalID" ColumnName="NationalID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="test2Model.sysdiagram">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="definition" ColumnName="definition" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="IMGs">
+            <EntityTypeMapping TypeName="test2Model.IMG">
+              <MappingFragment StoreEntitySet="IMG">
+                <ScalarProperty Name="IDProduct" ColumnName="IDProduct" />
+                <ScalarProperty Name="IMGPath" ColumnName="IMGPath" />
+                <ScalarProperty Name="title" ColumnName="title" />
+                <ScalarProperty Name="IDIMG" ColumnName="IDIMG" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

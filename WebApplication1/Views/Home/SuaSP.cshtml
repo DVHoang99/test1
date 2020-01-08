@@ -1,0 +1,27 @@
+﻿
+@{
+    ViewBag.Title = "SuaSP";
+}
+
+@model WebApplication1.Models.SanPham
+<h2>SuaSP</h2>
+
+<form method="post" action="/Home/SuaSP">
+    <div class="form-group">
+
+    </div>
+    <div class="form-group">
+        <label>ID</label>
+        <input value="@Model.ID" id="demo" type="text" class="form-control" name="ID" placeholder="Nhập Tên Sản Phẩm">
+        <label>Tên Sản Phẩm</label>
+        <input value="@Model.Ten" id="demo" type="text" class="form-control" name="Ten" placeholder="Nhập Tên Sản Phẩm">
+        <label>Số lượng</label>
+        <input value="@Model.SoLuong" id="demo" type="text" class="form-control" name="SoLuong" placeholder="Số lượng">
+        <label> Tên Quốc Gia </label>
+        <input value="@ViewBag.a" id="demo" type="text" class="form-control" name="NationalName" placeholder="Số lượng">
+    </div>
+
+    <button type="submit" class="btn btn-primary">Sửa</button>
+</form>
+@ViewBag.a
+<img src="~/img/activities1.jpeg" />

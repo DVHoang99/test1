@@ -1,0 +1,24 @@
+﻿
+@{
+    ViewBag.Title = "ThemSanPham";
+}
+
+<h2>ThemSanPham</h2>
+
+<form method="post" action="/Home/ThemSanPham">
+
+    <div class="form-group">
+        <label>Tên Sản Phẩm</label>
+        <input id="demo" type="text" class="form-control" name="Ten" placeholder="Nhập Tên Sản Phẩm">
+    </div>
+    <div class="form-group">
+        <label>Số Lượng</label>
+        <input id="demo" type="text" class="form-control" name="SoLuong" placeholder="Nhập số lượng">
+    </div>
+    <div class="form-group">
+        <label>Tên Quốc gia</label>
+        <input id="demo" type="text" class="form-control" name="NationalName" placeholder="nhập tên quốc gia">
+    </div>
+    <button type="submit" class="btn btn-primary">Save</button>
+</form>
+@ViewBag.a

@@ -1,0 +1,698 @@
+﻿
+@{
+    ViewBag.Title = "SanPham";
+}
+
+
+@model IEnumerable<WebApplication1.Models.SanPham>
+
+
+<head>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 95%;
+        }
+
+        td, th {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 10px;
+        }
+
+        /*.dmHoang {
+                width: 350px;
+                height: 112px;
+                display: inline-flex;
+            }*/
+
+        button {
+            margin-right: 10px;
+        }
+
+        img {
+            width: 70px;
+            height: 70px;
+        }
+    </style>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="~/JS/jquery-3.4.1.min.js"></script>
+    <script src="~/JS/jquery-3.4.1.js"></script>
+    <link href="//cdn.datatables.net/1.10.9/css/jquery.dataTables.min.css" rel="stylesheet" />
+    @* Load datatable js *@
+    @section Scripts{
+        <script src="//cdn.datatables.net/1.10.9/js/jquery.dataTables.min.js"></script>
+        <script>
+            $(document).ready(function () {
+                $('#MyTable').DataTable();
+            });
+        </script>
+    }
+</head>
+
+<body>
+    <h2>DanhSachSanPham</h2>
+    <table id="MyTable" class="display table table-striped table-bordered dt-responsive nowrap " style="width:100%">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Hình ảnh</th>
+                <th>Tên sản phẩm</th>
+                <th>Số lượng</th>
+                <th>Danh sách quốc gia</th>
+                <th>
+                    <button id="Button1" class="btn btn-warning " data-toggle="modal" data-target="#myModalThem">Thêm sản phẩm</button>
+                </th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td class="ID">@item.ID</td>
+                    <td>
+                        @{
+                            foreach (var item1 in item.IMGs)
+                            {
+                                var b = item1.IMGPath.Trim();
+                                <img src="@b" />
+                                break;
+                            }
+
+                        }
+                    </td>
+                    <td class="Name">@item.Ten</td>
+                    <td class="Soluong">@item.SoLuong</td>
+                    <td class="QuocGia">
+                        @{
+                            foreach (var item1 in item.infoProducts)
+                            {
+                                string a = item1.NATIONAL.NationalName.Trim() + "; ";
+                                @a
+                            }
+
+                        }
+                    </td>
+                    <td class="dmHoang">
+                        <button id="Button12" class="btn btn-success UpdateButton" data-toggle="modal" data-target="#myModal">Sửa sản phẩm</button>
+                        <p style="margin:7px"> </p>
+                        <a class="btn btn-danger UpdateButton" href="/Home/XoaSp?id=@item.ID">Xóa</a>
+
+                    </td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                <th>ID</th>
+                <th>Hình ảnh</th>
+                <th>Tên sản phẩm</th>
+                <th>Số lượng</th>
+                <th>Danh sách quốc gia</th>
+                <th> </th>
+            </tr>
+        </tfoot>
+    </table>
+
+
+    <div class="modal fade" id="myModalThem" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content" style="max-width:299px">
+                <div class="modal-header">
+                    <button class=" close" type="button" data-dismiss="modal">&times;</button>
+                    <h3 style="color:darkslateblue" class="w3-center"><b>Thêm sản phẩm</b></h3>
+                </div>
+                <div class="w3-border" style="margin:5% 5% 5% 5%; padding-bottom:5%">
+                    <div class="form-group">
+                        <label>Nhập tên sản phẩm</label>
+                        <input class="form-control" name="ten" placeholder="Tên sản phẩm" id="themTen">
+                    </div>
+                    <div class="form-group">
+                        <label>Nhập số lượng</label>
+                        <input class="form-control" name="SoLuong" placeholder="Số lượng" id="themSoluong">
+                    </div>
+                    <div class="form-group">
+                        <label>Nhập các quốc gia:</label>
+                        <input class="form-control" name="QuocGia" placeholder="Quốc gia" id="themQuocGia">
+                    </div>
+                    <div class="form-group">
+                        <label>Chọn hình ảnh</label>
+                        <input type="file" class="form-control" name="fileImg" id="themFileImg" required>
+                    </div>
+
+                    <button id="UpdateButton5" type="submit" class="btn btn-primary w3-block w3-green w3-section w3-padding">Thêm</button>
+                </div>
+                <script>
+                    $("#UpdateButton5").on("click", function () {
+                        let thisbtn = $(this);
+                        let name = document.getElementById("themTen").value;
+                        let soluong = document.getElementById("themSoluong").value;
+                        let quocgia = document.getElementById("themQuocGia").value;
+                        //let fileImg = document.getElementById("fileImg").files[0];
+                        //var file = $("#fileImg")[0].files[0];
+                        var formData = new FormData();
+                        formData.append('fileImg', $('#themFileImg')[0].files[0]);
+                        formData.append('ten', name);
+                        formData.append('soluong', soluong);
+                        formData.append('nationalname', quocgia);
+                        //console.log(file);
+                        $.ajax({
+                            url: "/Home/ThemSPJson",
+                            type: "POST",
+
+                            processData: false,
+                            contentType: false,
+                            data: formData,
+                            success: function (data) {
+                                if (data) {
+                                    alert("jklfhgkiudhuirfghl");
+                                }
+                                else
+                                    alert("Không thể sửa dữ liệu");
+                                window.location.reload();
+                            }
+                        })
+                    })
+                </script>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog">
+
+            Modal content
+            <div class="modal-content" style="max-width:299px">
+                <div class="modal-header">
+                    <button class=" close" type="button" data-dismiss="modal">&times;</button>
+                    <h3 style="color:darkslateblue" class="w3-center"><b>Sửa sản phẩm</b></h3>
+                </div>
+
+                <div style="margin:5% 5% 5% 5%; padding-bottom:5%">
+                    <div style="display: none" class="form-group">
+                        <input class="form-control" name="ID" id="IDSua">
+                    </div>
+                    <div class="form-group">
+                        <label>Sửa tên sản phẩm</label>
+                        <input class="form-control" name="Ten" id="TenSua">
+                    </div>
+                    <div class="form-group">
+                        <label>Sửa số lượng</label>
+                        <input class="form-control" name="SoLuong" id="SoluongSua">
+                    </div>
+                    <div class="form-group">
+                        <label>Sửa tên quốc gia</label>
+                        <input class="form-control" name="QuocGia" id="QuocGiaSua">
+                    </div>
+                    <div class="form-group">
+                        <label>Chọn hình ảnh</label>
+                        <input type="file" class="form-control" name="fileImg" id="ImgSua" required>
+                    </div>
+                    <button id="UpdateButton1" type="button" class="btn btn-primary w3-block w3-green w3-section w3-padding">Sửa</button>
+                </div>
+
+                <script>
+                    $("#UpdateButton1").on("click", function () {
+                        $(".UpdateButton").modal('hide');
+                        let thisbtn = $(this);
+                        let id = document.getElementById("IDSua").value;
+                        let name = document.getElementById("TenSua").value;
+                        let soluong = document.getElementById("SoluongSua").value;
+                        let quocgia = document.getElementById("QuocGiaSua").value;
+                        var formData = new FormData();
+                        formData.append('IMGSua', $('#ImgSua')[0].files[0]);
+                        formData.append('id', id);
+                        formData.append('Ten', name);
+                        formData.append('SoLuong', soluong);
+                        formData.append('NationalName', quocgia);
+                        $.ajax({
+                            url: "/Home/SuaSanpham",
+                            type: "POST",
+                            dataType: "json",
+                            data: formData,
+                            processData: false,
+                            contentType: false,
+                            success: function (data) {
+                                if (data) {
+                                    alert("1");
+                                }
+                                else
+                                    alert("Không thể sửa dữ liệu");
+                                window.location.reload();
+                            }
+                        })
+                    })
+
+
+
+                    $(".UpdateButton").on("click", function id() {
+                        let thisbtn = $(this);
+                        document.getElementById("IDSua").value = thisbtn.parent().parent().find(".ID").html();
+                        document.getElementById("TenSua").value = thisbtn.parent().parent().find(".Name").html().trim();
+                        document.getElementById("SoluongSua").value = thisbtn.parent().parent().find(".Soluong").html();
+                        document.getElementById("QuocGiaSua").value = thisbtn.parent().parent().find(".QuocGia").html().trim();
+                    })
+
+                </script>
+
+            </div>
+        </div>
+    </div>
+
+    @*<div class="modal fade" id="myModalXoa" role="dialog">
+        <div class="modal-dialog">*@
+
+            <!-- Modal content-->
+            @*<div class="modal-content" style="max-width:299px">
+                <div class="modal-header">
+                    <button class=" close" type="button" data-dismiss="modal">&times;</button>
+                    <h3 style="color:darkslateblue" class="w3-center"><b>Xóa sản phẩm</b></h3>
+                </div>
+                <div style="margin:5% 5% 5% 5%; padding-bottom:5%">
+                    <div style="display: none" class="form-group">
+                        <input class="form-control" name="ID" id="IDXoa">
+                    </div>
+                    <div class="form-group">
+                        <label>Tên sản phẩm</label>
+                        <input class="form-control" name="Ten" id="TenXoa" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label>Số lượng</label>
+                        <input class="form-control" name="SoLuong" id="SoluongXoa" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label>Tên quốc gia</label>
+                        <input class="form-control" name="QuocGia" id="QuocGiaXoa" readonly>
+                    </div>
+                    <p class="demo"></p>
+                    <button id="UpdateButton2" type="submit" class="btn btn-primary w3-block w3-green w3-section w3-padding">Xóa</button>
+                </div>
+            </div>
+
+            <script>
+                $("#UpdateButton2").on("click", function () {
+                    let thisbtn = $(this);
+                    let id = document.getElementById("IDXoa").value;
+                    $.ajax({
+                        url: "/Home/XoaSanPhamJson",
+                        type: "POST",
+                        dataType: "json",
+                        data: {
+                            id: id
+                        },
+                        success: function (data) {
+                            if (data != 0) {
+                                alert("Đã xóa thành công!!!");
+                            }
+                            else
+                                alert("Không thể xóa dữ liệu");
+                            window.location.reload();
+                        }
+                    })
+                })
+                $(".UpdateButton").on("click", function id() {
+                    let thisbtn = $(this);
+
+                    document.getElementById("IDXoa").value = thisbtn.parent().parent().find(".ID").html();
+                    document.getElementById("TenXoa").value = thisbtn.parent().parent().find(".Name").html().trim();
+                    document.getElementById("SoluongXoa").value = thisbtn.parent().parent().find(".Soluong").html();
+                    document.getElementById("QuocGiaXoa").value = thisbtn.parent().parent().find(".QuocGia").html().trim();
+                })
+
+            </script>
+        </div>
+    </div>*@
+    @*<h2>Sẩn Phẩm</h2>
+        <head>
+
+            <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+            <style>
+                table {
+                    font-family: arial, sans-serif;
+                    border-collapse: collapse;
+                    width: 95%;
+                }
+
+                td, th {
+                    border: 1px solid #dddddd;
+                    text-align: left;
+                    padding: 10px;
+                }
+
+                .button {
+                    margin-left: 40px;
+                }
+
+
+                a {
+                    margin-right: 5px;
+                }
+
+                img {
+                    width: 100px;
+                    height: 100px;
+                }
+            </style>*@
+    @*<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="~/js/jquery-3.4.1.min.js"></script>
+        <script src="~/js/jquery-3.4.1.js"></script>*@
+    @*<link href="//cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css" />
+
+            @section Scripts{
+                <script src="//cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+                <script>
+                    $(document).ready(function () {
+                        $('#myTable').DataTable();
+                    });
+                </script>
+
+            }
+
+        </head>
+        <body>
+            <table id="myTable" >
+                <tr>
+                    <th style="width:50px;">ID</th>
+                    <th>Tên sản phẩm</th>
+                    <th>Số lượng</th>
+                    <th>hinh ảnh</th>
+                    <th>Danh sách quốc gia</th>
+
+                    <th style="width:250px; " class="button">*@
+    @*<button style="width:150px; text-align: center; margin-left: 15px;" class="btn btn-success btn1" data-toggle="modal" data-target="#myModalThem">Thêm</button>
+
+            </th>
+        </tr>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td class="ID">@item.ID</td>
+                    <td class="Ten">@item.Ten</td>
+                    <td class="SoLuong">@item.SoLuong</td>
+                    <td>
+                        @{
+                            foreach (var item2 in item.IMGs)
+                            {
+                                string b = item2.IMGPath;
+                                <img src="@b" />
+                            }
+
+                        }
+
+                    </td>
+                    <td class="NationalName ">
+                        @{
+
+                            foreach (var item1 in item.infoProducts)
+                            {
+                                string a = item1.NATIONAL.NationalName + " ";
+                                @a
+
+                            }
+                        }
+                    </td>
+                    <td class="button">
+                        <div>*@
+    @*<a class="btn btn-default" href="/Home/XoaSp?id=@item.ID">Xóa</a>
+        <button style="margin-right: 5px;" id="btn3" class="btn btn-default UpdateButton" data-toggle="modal" data-target="#myModal">sửa</button>*@
+    @*<button class="btn btn-success btn1 UpdateButton1234  " data-toggle="modal" data-target="#myModalImg">Thêm</button>
+                                </div>
+
+
+                            </td>
+
+                        </tr>
+
+                    }
+                <tbody>
+            </table>
+        </body>*@
+
+    @*<div id="myModalThem" class="modal fade" role="dialog">
+        <div class="modal-dialog">*@
+
+
+
+    <!-- Modal content-->
+    @*<div class="modal-content">
+                <div style="margin-left:25%;">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Modal Header</h4>
+                    </div>
+
+                    <div id="modal-body">
+
+                        <div class="form-group">
+
+                        </div>
+                        <div class="form-group">
+
+                            <label>Tên Sản Phẩm</label>
+                            <input id="ThemTen" type="text" class="form-control" name="Ten" placeholder="Nhập Tên Sản Phẩm">
+                            <label>Số lượng</label>
+                            <input id="ThemSoLuong" type="text" class="form-control" name="SoLuong" placeholder="Số lượng">
+                            <label> Tên Quốc Gia </label>
+                            <input id="ThemNationalName" type="text" class="form-control" name="NationalName" placeholder="Số lượng">
+                            <label>Chọn hình ảnh</label>
+                            <input type="file" class="form-control" name="fileImg" id="ThemIMG" required>
+                            <button id="buttonAdd" type="button" class="btn btn-primary">Lưu</button>
+                            @ViewBag.a
+                        </div>
+
+                    </div>
+                </div>
+
+
+            </div>
+
+        </div>
+        <script>
+            $("#buttonAdd").on("click", function () {
+
+                let thisbtn = $(this);
+
+                let ten = document.getElementById("ThemTen").value;
+                let soluong = document.getElementById("ThemSoLuong").value;
+                let nationalname = document.getElementById("ThemNationalName").value;
+                var file = $('#ThemIMG')[0].files[0];
+                var formData = new FormData();
+                formData.append('fileImg', $('#ThemIMG')[0].files[0]);
+
+                formData.append('ten', ten);
+                formData.append('soluong', soluong);
+                formData.append('nationalname', nationalname);
+                console.log(soluong);
+                $.ajax({
+                    url: "/Home/ThemSPJson",
+                    type: "post",
+
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+
+                    success: function (data) {
+                        if (data) { alert("Thêm thành công") }
+                        else
+                            alert("không thêm được");
+                        window.location.reload();
+                    }
+                })
+            })
+
+
+            </script>
+            </div>
+
+
+            <div id="myModal" class="modal fade" role="dialog">
+                <div class="modal-dialog">*@
+
+
+
+    <!-- Modal content-->
+    @*<div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h4 class="modal-title">Modal Header</h4>
+                            </div>
+
+                            <div id="modal-body">
+
+                                <div style="margin-left:25%;" class="form-group">
+                                    <label>ID</label>
+                                    <input style="display: none;" id="IDSua1" type="text" class="form-control" name="ID" placeholder="Nhập Tên Sản Phẩm">
+                                    <label style="display:none;">Tên Sản Phẩm</label>
+                                    <input style="display:none;" id="Ten" type="text" class="form-control" name="Ten" placeholder="Nhập Tên Sản Phẩm">
+                                    <label>Số lượng</label>
+                                    <input id="SoLuong" type="text" class="form-control" name="SoLuong" placeholder="Số lượng">
+                                    <label> Tên Quốc Gia </label>
+                                    <input id="NationalName" type="text" class="form-control" name="NationalName" placeholder="Số lượng">
+                                    <label>Chọn hình ảnh</label>
+                                    <input type="file" class="form-control" name="fileImg" id="ImgSua" required>
+
+                                    <button id="UpdateButton" type="button" class="btn btn-primary">Sửa</button>
+                                    @ViewBag.a
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <script>
+
+        $("#UpdateButton").on("click", function () {
+
+                                                let thisbtn = $(this);
+                                            let id = document.getElementById("IDSua1").value;
+                                            let ten = document.getElementById("Ten").value;
+                                            let soluong = document.getElementById("SoLuong").value;
+                                            let nationname = document.getElementById("NationalName").value;
+                                            var formData = new FormData();
+                                            formData.append('IMGSua', $('#ImgSua')[0].files[0]);
+                                            formData.append('ID', id);
+                                            formData.append('Ten', ten);
+                                            formData.append('SoLuong', soluong);
+                                            formData.append('NationalName', nationname);
+                                            console.log(NationalName);
+            $.ajax({
+                                                url: "/Home/SuaSanpham",
+                                            type: "post",
+                                            dataType: "json",
+                                            data: formData,
+                                            processData: false,
+                                            contentType: false,
+
+                success: function (data) {
+                    if (data) {alert("sửa thành công")}
+                                            else
+                                                alert("Không sửa được");
+                                            window.location.reload();
+                                        }
+                                    })
+                                })
+        $(".UpdateButton").on("click", function () {
+                                                alert(1);
+                                            let thisbtn = $(this);
+                                            document.getElementById("IDSua1").value = thisbtn.parent().parent().find(".ID").html();
+                                            document.getElementById("Ten").value = thisbtn.parent().parent().find(".Ten").html();
+                                            document.getElementById("SoLuong").value = thisbtn.parent().parent().find(".SoLuong").html();
+                                            document.getElementById("NationalName").value = thisbtn.parent().parent().find(".NationalName").html();
+
+                                        })
+                    </script>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+
+
+
+                <div id="myModal1" class="modal fade" role="dialog">
+                    <div class="modal-dialog">*@
+
+
+    <!-- Modal content-->
+    @*<div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Modal Header</h4>
+        </div>
+
+        <div class="modal-body1">*@
+    @*<form method="post" action="/Home/ThemSanPham">
+
+            <div class="form-group">
+                <label>Tên Sản Phẩm</label>
+                <input id="demo" type="text" class="form-control" name="Ten" placeholder="Nhập Tên Sản Phẩm">
+            </div>
+            <div class="form-group">
+                <label>Số Lượng</label>
+                <input id="demo" type="text" class="form-control" name="SoLuong" placeholder="Nhập số lượng">
+            </div>
+            <div class="form-group">
+                <label>Tên Quốc gia</label>
+                <input id="demo" type="text" class="form-control" name="NationalName" placeholder="nhập tên quốc gia">
+            </div>
+            <button type="submit" class="btn btn-primary">Save</button>
+        </form>
+        @ViewBag.a*@
+    @*</div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="modal fade" id="myModalImg" role="dialog">
+
+
+            <div class="modal-dialog">
+                Modal content
+                <div class="modal-content" style="max-width:299px">
+                    <div class="modal-header">
+                        <button class=" close" type="button" data-dismiss="modal">&times;</button>
+                        <h3 style="color:darkslateblue" class="w3-center"><b>Thêm hình ảnh</b></h3>
+                    </div>
+                    <div style="margin:5% 5% 5% 5%; padding-bottom:5%">
+                        <div class="form-group">
+                            <input id="IDIMG" type="text" class="form-control" name="ID" placeholder="Nhập Tên Sản Phẩm">
+                        </div>
+                        <div class="form-group">
+                            <label>Thêm tên hình ảnh</label>
+                            <input class="form-control" name="Ten" id="TenImg">
+                        </div>
+                        <div class="form-group">
+                            <label>Chọn hình ảnh</label>
+                            <input type="file" class="form-control" name="fileImg" id="fileImg" required>
+                        </div>
+                        <button id="UpdateButton5" type="button" class="btn btn-primary w3-block w3-green w3-section w3-padding">Thêm Hinh Ảnh</button>
+                    </div>
+                    <script>
+
+        $("#UpdateButton5").on("click", function () {
+                                        let thisbtn = $(this);
+                                    let id = document.getElementById("IDIMG").value;
+                                    let name = document.getElementById("TenImg").value;*@
+    @*// let fileImg = document.getElementById("fileImg").files[0];
+                                    // var file = $("#fileImg")[0].files[0];
+                                    var formData = new FormData();
+                                    formData.append('fileImg', $('#fileImg')[0].files[0]);
+                                    formData.append('id', id);
+                                    formData.append('name', name);
+                                    console.log(name);
+            $.ajax({
+                                        url: "/Home/ThemHinhAnhJson",
+                                    type: "POST",
+                                    processData: false,
+                                    contentType: false,
+                                    data: formData,
+                success: function (data) {
+                    if (data) {
+                                        alert("jklfhgkiudhuirfghl");
+                                }
+                                else
+                                    alert("Không thể sửa dữ liệu");
+                                window.location.reload();
+                            }
+                        })
+                    })
+        $(".UpdateButton1234").on("click", function () {
+                                        alert(1);
+                                    let thisbtn = $(this);
+                                    document.getElementById("IDIMG").value = thisbtn.parent().parent().find(".ID").html();
+
+                                })
+                    </script>
+                </div>
+            </div>
+        </div>*@

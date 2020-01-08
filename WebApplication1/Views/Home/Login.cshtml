@@ -1,0 +1,36 @@
+﻿
+@{
+    ViewBag.Title = "Login";
+}
+
+<h2>Login</h2>
+
+<form method="post" action="/Home/Login">
+    <div class="form-group">
+        <label>userName</label>
+        <input id="demo" type="text" class="form-control" name="userName" placeholder="Tên Tai Khoan">
+
+    </div>
+    <p class="demo"></p>
+    <div class="form-group">
+        <label>Password</label>
+        <input type="password" class="form-control" name="passWord" placeholder="Password">
+    </div>
+    @ViewBag.a
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+@*<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script>
+      $(document).ready(function(){
+          $("#demo").keydown(function () {
+              var taikhoan = $("[name=userName]").val();
+              if (taikhoan == "abc") {
+                  $(".demo").html("tai khoan dung");
+              }
+              else {
+                  $(".demo").html("tai khoan sai");
+              }
+        });
+      });
+    </script>*@
